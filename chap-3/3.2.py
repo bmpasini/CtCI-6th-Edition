@@ -1,4 +1,4 @@
-# design a stack that has O(1) push, pop and min functions
+# Design a stack that has O(1) push, pop and min functions
 
 class NodeWithMin(object):
 

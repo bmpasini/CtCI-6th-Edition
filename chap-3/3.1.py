@@ -1,4 +1,4 @@
-# use a single array to implement 3 stacks
+# Use a single array to implement 3 stacks
 
 class ThreeStacks(object):
 
