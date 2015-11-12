@@ -4,62 +4,63 @@ class Node(object):
         self.data = data
         self.next = next
 
+
 class Queue(object):
 
-    first = None
-    last = None
+    head = None
+    tail = None
 
-    def add(self, data):
+    def enqueue(self, data):
         new_node = Node(data)
-        if self.last:
-            self.last.next = new_node
-        self.last = new_node
-        if self.first is None:
-            self.first = self.last
+        if self.tail:
+            self.tail.next = new_node
+        self.tail = new_node
+        if self.head is None:
+            self.head = self.tail
 
-    def remove(self):
-        if self.first is None:
+    def dequeue(self):
+        if self.head is None:
             return None
-        data = self.first.data
-        self.first = self.first.next
-        if self.first is None:
-            self.last = None
+        data = self.head.data
+        self.head = self.head.next
+        if self.head is None:
+            self.tail = None
         return data
 
     def peek(self):
-        if self.first is None:
+        if self.head is None:
             return None
-        return self.first.data
+        return self.head.data
 
     def is_empty(self):
-        return self.first is None
+        return self.head is None
 
 
 if __name__ == "__main__":
     q = Queue()
-    q.add(1)
-    q.add(2)
-    q.add(3)
-    print(q.remove())
-    print(q.remove())
-    print(q.remove())
-    q.add(4)
-    print(q.remove())
-    q.add(5)
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    print(q.dequeue())
+    print(q.dequeue())
+    print(q.dequeue())
+    q.enqueue(4)
+    print(q.dequeue())
+    q.enqueue(5)
     print(q.peek())
-    print(q.remove())
-    print(q.remove())
+    print(q.dequeue())
+    print(q.dequeue())
     print(q.peek())
-    q.add(1)
-    q.add(2)
-    q.add(3)
-    q.add(4)
-    q.add(5)
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    q.enqueue(4)
+    q.enqueue(5)
     print(q.peek())
-    print(q.remove())
-    print(q.remove())
-    print(q.remove())
+    print(q.dequeue())
+    print(q.dequeue())
+    print(q.dequeue())
     print(q.peek())
-    print(q.remove())
-    print(q.remove())
-    print(q.remove())
+    print(q.dequeue())
+    print(q.dequeue())
+    print(q.dequeue())

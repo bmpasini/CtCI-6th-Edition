@@ -4,6 +4,7 @@ class Node(object):
         self.data = data
         self.next = next
 
+
 class Stack(object):
 
     def __init__(self, top=None):
