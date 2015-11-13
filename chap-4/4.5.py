@@ -90,22 +90,65 @@ class BST(object):
             return x
 
 
-# Assuming no repeated elements
-# Time complexity: O(n)
+# Assuming no repeated elements (if left elements and be equal the parent, change >= for >)
+# Space complexity: O(n)
+# Time complexity:  O(n)
 def is_bst_bfs(bt):
-    q = [ bt.root ] # add left, remove right
+    q = [ (bt.root, None, None) ] # add left, remove right // (node, min, max)
     while len(q) != 0:
-        x = q.pop()
+        x, _min, _max = q.pop()
+        if (_min is not None and x.key <= _min) or (_max is not None and x.key >= _max):
+            return False
         if x.left:
-            if x.left.key >= x.key:
-                return False
-            q.insert(0, x.left)
+            q.insert(0, (x.left, _min, x.key))
         if x.right:
-            if x.right.key <= x.key:
-                return False
-            q.insert(0, x.right)
+            q.insert(0, (x.right, x.key, _max))
     return True
 
+class Variable:
+    v = None
+
+# Assuming no repeated elements
+# Space complexity: O(log(n))
+# Time complexity:  O(n)
+def is_bst_in_order(bt):
+    last = Variable()
+    return _is_bst_in_order(bt.root, last)
+
+def _is_bst_in_order(x, last):
+    if x is not None:
+        if not _is_bst_in_order(x.left, last):
+            return False
+        if last.v is not None and x.key <= last.v:
+            return False
+        last.v = x.key
+        if not _is_bst_in_order(x.right, last):
+            return False
+    return True
+
+# Assuming no repeated elements (if left elements and be equal the parent, change >= for >)
+# Space complexity: O(log(n))
+# Time complexity:  O(n)
+def is_bst_dfs(bt):
+    return _is_bst_dfs(bt.root, None, None)
+
+def _is_bst_dfs(x, _min, _max):
+    if x is None:
+        return True
+    if (_min is not None and x.key <= _min) or (_max is not None and x.key >= _max):
+        return False
+    if not _is_bst_dfs(x.left, _min, x.key) or not _is_bst_dfs(x.right, x.key, _max):
+        return False
+    return True
+
+class BT(object):
+
+    root = NodeBST(20)
+    root.left = NodeBST(10)
+    root.right = NodeBST(30)
+    # root.left.right = NodeBST(19)
+    root.left.right = NodeBST(20)
+    # root.left.right = NodeBST(25)
 
 if __name__ == "__main__":
     bst = BST()
@@ -125,6 +168,8 @@ if __name__ == "__main__":
     bst.put(13)
     bst.put(15)
     print(is_bst_bfs(bst))
+    print(is_bst_in_order(bst))
+    print(is_bst_dfs(bst))
     t = BinaryTree()
     t.insert_left(1)
     t.insert_left(2)
@@ -135,4 +180,11 @@ if __name__ == "__main__":
     t.insert_right(7)
     t.insert_right(8)
     print(is_bst_bfs(t))
-    
+    print(is_bst_in_order(t))
+    print(is_bst_dfs(t))
+    bt = BT()
+    print(is_bst_bfs(bt))
+    print(is_bst_in_order(bt))
+    print(is_bst_dfs(bt))
+
+
