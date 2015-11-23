@@ -92,6 +92,22 @@ class LinkedList(object):
             prev.next = None
             return x.data
 
+    def remove(self, node):
+        if self.head is None:
+            return None
+        if self.head.data == node:
+            self.head = self.head.next
+            return node
+        prev = None
+        x = self.head
+        while x:
+            if x.data == node:
+                prev.next = x.next
+                return node
+            prev = x
+            x = x.next
+        return None
+
     def is_empty(self):
         return self.head is None
 
@@ -104,6 +120,14 @@ class LinkedList(object):
         x = self.head
         while x is not None:
             print(x.data, end='')
+            print(" -> ", end='')
+            x = x.next
+        print(None)
+
+    def show_bst(self):
+        x = self.head
+        while x is not None:
+            print(x.data.key, end='')
             print(" -> ", end='')
             x = x.next
         print(None)
@@ -125,33 +149,29 @@ class LinkedList(object):
             x = x.next
         x.next = tail.head
 
-def ary_to_ll(ary):
-    ll = LinkedList()
-    for i in ary:
-        ll.add_last(i)
-    return ll
+    def __iter__(self):
+        nodes = list()
+        x = self.head
+        while x:
+            nodes.append(x)
+            x = x.next
+        return iter(nodes)
 
-def ll_to_ary(ll):
-    l = ll.clone()
-    ary = list()
-    while not l.is_empty():
-        ary.append(l.remove_last())
-    return ary
-
-def sequences(bst):
-    ary = list()
-    _sequences(x.root, ary)
-    return ary
-
-def _sequences(x, ary):
+def sequences(x):
+    result = list()
     if x is None:
-        return None
-    left = _sequences(x.left, ary)
-    right = _sequences(x.right, ary)
-
-    # if left is not None and right is not None:
-        
-    # weave
+        result.append(LinkedList())
+        return result
+    prefix = LinkedList()
+    prefix.add_last(x.key)
+    left = sequences(x.left)
+    right = sequences(x.right)
+    for l in left:
+        for r in right:
+            weaved = list()
+            weave(l, r, prefix, weaved)
+            result += weaved
+    return result
 
 def weave(l1, l2, prefix, ary):
     if l1.is_empty() or l2.is_empty():
@@ -173,28 +193,62 @@ def weave(l1, l2, prefix, ary):
     prefix.remove_last()
     l2.add_first(h2)
 
-        
+def sequences2(bst):
+    all_seqs = list()
+    build_seqs(bst.root, list(), list(), all_seqs)
+    return all_seqs
+
+def build_seqs(x, building, seq, all_seqs): # building is a queue (append left, remove right)
+    seq.append(x.key)
+    if x.left:
+        building.insert(0, x.left)
+    if x.right:
+        building.insert(0, x.right)
+    if len(building) == 0:
+        all_seqs.append(seq)
+    for i in range(len(building)):
+        x = building.pop()
+        build_seqs(x, building.copy(), seq.copy(), all_seqs)
+        building.insert(0, x)
 
 if __name__ =="__main__":
-    # print(sequences(bst))
-    l1 = LinkedList()
-    l1.add_last(1)
-    l1.add_last(2)
-    l1.add_last(3)
-    l1.show()
-    l2 = LinkedList()
-    l2.add_last(4)
-    l2.add_last(5)
-    l2.add_last(6)
-    l2.show()
-    l = ary_to_ll([1,2,3])
-    l.show()
-    
+    bst = BST()
+    bst.put(8)
+    bst.put(4)
+    bst.put(12)
+    bst.put(2)
+    bst.put(6)
+    bst.put(10)
+    # bst.put(14)
+    # bst.put(1)
+    # bst.put(3)
+    # bst.put(5)
+    # bst.put(7)
+    # bst.put(9)
+    # bst.put(11)
+    # bst.put(13)
+    # bst.put(15)
+    for l in sequences(bst.root):
+        l.show()
+    print("-----")
+    for l in sequences2(bst):
+        print(l)
+    # sequences(bst.root)
+    # sequences2(bst)
+    # l1 = LinkedList()
+    # l1.add_last(1)
+    # l1.add_last(2)
+    # l1.add_last(3)
+    # l1.show()
+    # l2 = LinkedList()
+    # l2.add_last(4)
+    # l2.add_last(5)
+    # l2.add_last(6)
+    # l2.show()
     # ary = list()
     # weave(l1,l2,LinkedList(),ary)
     # for ll in ary:
     #     ll.show()
-
 
 
 

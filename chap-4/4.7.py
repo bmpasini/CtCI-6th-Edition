@@ -99,7 +99,6 @@ def dfs(s, v):
         v.set_state(State.VISITED)
         s.insert(0, v.get_id())
     return True
-    
 
 def build_graph(projects, dependencies):
     g = Graph(True)
