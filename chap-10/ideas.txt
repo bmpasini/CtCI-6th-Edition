@@ -1,0 +1,2 @@
+Ideas:
+- Find size of array without [].size() method: Search power of 2 indices to find it in linearithmic time.
