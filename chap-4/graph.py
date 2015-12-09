@@ -1,10 +1,16 @@
+class Status(object):
+
+    UNVISITED = 1
+    VISITING = 2
+    VISITED = 3
+
 
 class Vertex(object):
 
     def __init__(self, key):
         self.id = key
         self.adj = dict() # key: vertex, val: weight
-        self.visited = False
+        self.status = Status.UNVISITED
 
     def add_edge(self, v, weight=0):
         self.adj[v] = weight
@@ -18,14 +24,17 @@ class Vertex(object):
     def get_id(self):
         return self.id
 
-    def get_weight(self, x):
-        return self.adj[x]
+    def get_weight(self, v):
+        try:
+            return self.adj[v]
+        except KeyError:
+            raise Exception('These vertices are not connected.')
 
-    def set_visited(self, visited):
-        self.visited = visited
+    def set_status(self, status):
+        self.status = status
 
-    def get_visited(self):
-        return self.visited
+    def get_status(self):
+        return self.status
 
 
 class Graph(object):
@@ -53,9 +62,9 @@ class Graph(object):
             self.add_vertex(f)
         if t not in self.vertices:
             self.add_vertex(t)
-        self.vertices[f].add_edge(self.vertices[t])
+        self.vertices[f].add_edge(self.vertices[t], weight)
         if not self.digraph:
-            self.vertices[t].add_edge(self.vertices[f])
+            self.vertices[t].add_edge(self.vertices[f], weight)
 
     def get_vertices(self):
         return self.vertices.keys()
@@ -65,7 +74,7 @@ class Graph(object):
 
     def reset_visits(self):
         for v in iter(self):
-            v.set_visited(False)
+            v.set_status(Status.UNVISITED)
 
 if __name__ == "__main__":
     g = Graph()
