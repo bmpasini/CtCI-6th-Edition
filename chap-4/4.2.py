@@ -83,3 +83,22 @@ if __name__ == "__main__":
     ary = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
     t.put_ary(ary)
     t.print_level_order()
+
+
+# binary search
+def create(bst, a):
+    _create(bst, a, 0, len(a)-1)
+
+def _create(bst, a, lo, hi):
+    if lo <= hi:
+        mid = (lo + hi) // 2
+        bst.put(a[mid], 0)
+        _create(bst, a, mid+1, hi)
+        _create(bst, a, lo, mid-1)
+
+if __name__ == "__main__":
+    t = BST()
+    ary = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    create(t, ary)
+    t.print_level_order()
+
